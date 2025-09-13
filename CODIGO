@@ -1,0 +1,213 @@
+<<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Cardápio - Delícias da Ju</title>
+<style>
+    :root{--bg:#f6eee3;--accent:#e76f8a;--muted:#6b4a3a;--card:#fff}
+    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+    body{margin:0;background:var(--bg);color:var(--muted);display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+    .app{width:100%;max-width:980px;background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.9));border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.08);overflow:hidden}
+    header{display:flex;gap:16px;align-items:center;padding:18px 22px;border-bottom:1px solid rgba(0,0,0,0.06);background:transparent}
+    .logo{width:84px;height:84px;flex:0 0 84px;border-radius:12px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
+    .logo img{width:100%;height:100%;object-fit:contain}
+    .brand{flex:1}
+    h1{margin:0;font-size:28px;color:var(--accent);font-weight:700}
+    p.lead{margin:6px 0 0;color:#5e4334}
+    .content{display:grid;grid-template-columns:320px 1fr;gap:20px;padding:18px}
+
+    /* sidebar */
+    .sidebar{padding:12px;background:transparent}
+    .categories{display:flex;flex-direction:column;gap:8px}
+    .cat-btn{background:transparent;border:0;padding:10px 12px;text-align:left;border-radius:8px;cursor:pointer;font-weight:600;color:#6b4a3a}
+    .cat-btn.active{background:rgba(231,111,138,0.12);color:var(--accent)}
+
+    /* main */
+    .main{padding:12px}
+    .search{display:flex;gap:8px;margin-bottom:12px}
+    .search input{flex:1;padding:10px 12px;border-radius:8px;border:1px solid rgba(0,0,0,0.08)}
+
+    .items{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .item{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.03);display:flex;flex-direction:column;gap:8px}
+    .item .thumb{height:110px;border-radius:8px;background:linear-gradient(90deg,#fff 0, #fff 100%);display:flex;align-items:center;justify-content:center;color:#bbb;font-weight:700}
+    .item h3{margin:0;font-size:16px;color:#5a3e34}
+    .desc{font-size:13px;color:#7a5d51}
+    .price{margin-top:auto;font-weight:700;color:var(--muted)}
+    .controls{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .controls input{width:64px;padding:6px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);text-align:center}
+    .controls button{background:var(--accent);border:0;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+    /* cart */
+    .cart{padding:12px;border-left:1px dashed rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:12px}
+    .cart h2{margin:0;font-size:18px;color:var(--muted)}
+    .cart-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto;padding-right:6px}
+    .cart-item{display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(0,0,0,0.02);padding:8px;border-radius:8px}
+    .cart-footer{display:flex;flex-direction:column;gap:8px}
+    .tot{font-weight:800;color:var(--muted)}
+    .whatsapp{display:inline-block;text-decoration:none;background:#25D366;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700;text-align:center}
+
+    footer{padding:12px 18px;border-top:1px solid rgba(0,0,0,0.04);display:flex;justify-content:space-between;align-items:center}
+    small{color:#7b5e50}
+
+    @media(max-width:880px){.content{grid-template-columns:1fr;}.cart{border-left:0;border-top:1px dashed rgba(0,0,0,0.04)}header{flex-direction:row}}
+  </style>
+</head>
+<body>
+<div class="app">
+<header>
+
+<div class="brand">
+<h1>Delícias da Jú</h1>
+<p class="lead">Em cada docinho, uma pitada a mais de carinho — peça pelo WhatsApp!</p>
+</div>
+<div style="text-align:right">
+<div style="font-size:12px;color:#6b4a3a">Instagram: <strong>@jusci_schultz</strong></div>
+<div style="font-size:12px;color:#6b4a3a">WhatsApp: <strong>(66) 9903-8589</strong></div>
+</div>
+</header>
+<div class="content">
+<aside class="sidebar">
+<div class="categories" id="categories"></div>
+</aside>
+<main class="main">
+<div class="search"><input id="search" placeholder="Procurar produtos..."/></div>
+<div class="items" id="items"></div>
+</main>
+<aside class="cart" style="width:320px;min-width:260px">
+<h2>Seu pedido</h2>
+<div class="cart-list" id="cartList"></div>
+<div class="cart-footer">
+<div class="tot" id="total">Total: R$ 0,00</div>
+<a class="whatsapp" href="#" id="whatsappBtn">Enviar pedido pelo WhatsApp</a>
+<small>Ao clicar, o WhatsApp será aberto com a lista do pedido já formatada.</small>
+</div>
+</aside>
+</div>
+<footer>
+<small>Cardápio digital — Delícias da Jú • Consulte o cardápio completo e preços conforme PDF</small>
+<small>Desenvolvido para mobile • substitua <code>logo.png</code> pela sua imagem</small>
+</footer>
+</div>
+<script>
+    // Número para WhatsApp: inclua o DDI (55) + DDD (66) + número (sem espaços)
+    const WHATSAPP_PHONE = '556699038589'; // atual: +55 66 9903-8589
+
+    // Dados extraídos (exemplo) do PDF enviado. Ajuste/complete conforme necessário.
+            const CATALOG = [
+      {id:1,cat:'Bolos - Redondos',name:'Bolo redondo 25 pedaços',price:110,desc:''},
+      {id:2,cat:'Bolos - Redondos',name:'Bolo redondo 35 pedaços',price:150,desc:''},
+      {id:3,cat:'Bolos - Redondos',name:'Bolo redondo 50 pedaços',price:240,desc:''},
+      {id:4,cat:'Bolos - Retangulares',name:'Bolo retangular 25 pedaços',price:125,desc:''},
+      {id:5,cat:'Bolos - Retangulares',name:'Bolo retangular 40 pedaços',price:160,desc:''},
+      {id:6,cat:'Donuts',name:'Donut decorado (unidade)',price:3.8,desc:''},
+      {id:7,cat:'Donuts',name:'Mini Donut (unidade)',price:2.5,desc:''},
+      {id:8,cat:'Tortas',name:'Torta de Limão',price:75,desc:''},
+      {id:9,cat:'Tortas',name:'Torta Banoffe',price:85,desc:''}
+    ];
+
+
+
+    // App state
+    let state = {category:null,cart:{}};
+
+    // Helpers
+    const money = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+
+    // Build categories
+    const cats = [...new Set(CATALOG.map(i=>i.cat))];
+    const catsEl = document.getElementById('categories');
+    cats.forEach((c,idx)=>{
+      const btn = document.createElement('button');
+      btn.className='cat-btn'+(idx===0?' active':'');
+      btn.innerText=c;
+      btn.onclick=()=>{document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');state.category=c;renderItems();}
+      catsEl.appendChild(btn);
+      if(idx===0) state.category = c;
+    });
+
+    // Render items
+    const itemsEl = document.getElementById('items');
+    function renderItems(){
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      itemsEl.innerHTML='';
+      const list = CATALOG.filter(i=>i.cat===state.category && (i.name.toLowerCase().includes(q) || i.desc.toLowerCase().includes(q)));
+      list.forEach(it=>{
+        const div = document.createElement('div');div.className='item';
+        div.innerHTML = `
+          <h3>${it.name}</h3>
+          <div class="desc">${it.desc || ''}</div>
+          <div class="price">${money(it.price)}</div>
+        `;
+        const controls = document.createElement('div');controls.className='controls';
+        const qty = document.createElement('input');qty.type='number';qty.min=0;qty.value=1;
+        const addBtn = document.createElement('button');addBtn.innerText='Adicionar';
+        addBtn.onclick = ()=>{addToCart(it,Number(qty.value||1));qty.value=1}
+        controls.appendChild(qty);controls.appendChild(addBtn);
+        div.appendChild(controls);
+        itemsEl.appendChild(div);
+      });
+      if(list.length===0) itemsEl.innerHTML='<div style="padding:18px;color:#7a5d51">Nenhum produto encontrado nessa categoria.</div>';
+    }
+
+    document.getElementById('search').addEventListener('input',renderItems);
+
+    // Cart functions
+    function addToCart(item,quantity){
+      if(quantity<=0) return;
+      const key = item.id;
+      if(!state.cart[key]) state.cart[key] = {...item,quantity:0};
+      state.cart[key].quantity += quantity;
+      renderCart();
+    }
+    function removeFromCart(key){delete state.cart[key];renderCart();}
+    function changeQty(key,q){ if(q<=0) removeFromCart(key); else {state.cart[key].quantity = q; renderCart();} }
+
+    const cartListEl = document.getElementById('cartList');
+    function renderCart(){
+      cartListEl.innerHTML='';
+      const items = Object.values(state.cart);
+      let total = 0;
+      items.forEach(it=>{
+        const row = document.createElement('div');row.className='cart-item';
+        row.innerHTML = `<div style="flex:1"><strong>${it.name}</strong><div style="font-size:12px;color:#774f43">${money(it.price)} cada</div></div>`;
+        const right = document.createElement('div');
+        const inp = document.createElement('input');inp.type='number';inp.value=it.quantity;inp.min=0;inp.style.width='56px';
+        inp.onchange = ()=>changeQty(it.id,Number(inp.value));
+        const rem = document.createElement('button');rem.innerText='❌';rem.style.background='transparent';rem.style.border='0';rem.style.cursor='pointer';rem.onclick=()=>removeFromCart(it.id);
+        right.appendChild(inp);right.appendChild(rem);
+        row.appendChild(right);
+        cartListEl.appendChild(row);
+        total += it.price * it.quantity;
+      });
+      document.getElementById('total').innerText = 'Total: ' + money(total);
+      updateWhatsAppButton();
+    }
+
+    function updateWhatsAppButton(){
+      const items = Object.values(state.cart);
+      const btn = document.getElementById('whatsappBtn');
+      if(items.length===0){ btn.href = '#'; btn.classList.add('disabled'); btn.innerText='Adicione produtos ao pedido'; btn.style.pointerEvents='none'; btn.style.opacity='0.6'; return; }
+      const lines = items.map(it=>`- ${it.quantity} x ${it.name} (R$ ${it.price.toFixed(2)})`);
+      const total = items.reduce((s,i)=>s + i.price*i.quantity,0);
+      lines.push('');lines.push('Total: R$ ' + total.toFixed(2));
+      lines.push('Nome:');lines.push('Telefone:');
+      const text = encodeURIComponent('Pedido via Cardápio digital - Delícias da Jú\n\n' + lines.join('\n'));
+      btn.href = `https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE}&text=${text}`;
+      btn.target = '_blank';btn.style.pointerEvents='auto';btn.style.opacity='1';btn.innerText = 'Enviar pedido pelo WhatsApp';
+    }
+
+    // Initial render
+    renderItems();renderCart();
+
+    // Optional: allow dropping a logo file to replace placeholder
+    const logoInput = document.createElement('input');logoInput.type='file';logoInput.accept='image/*';logoInput.style.display='none';
+    document.getElementById('siteLogo').addEventListener('click',()=>logoInput.click());
+    logoInput.onchange = e => {
+      const f = e.target.files[0]; if(!f) return; const url = URL.createObjectURL(f); document.getElementById('siteLogo').src = url;
+    }
+
+  </script>
+</body>
+</html>
